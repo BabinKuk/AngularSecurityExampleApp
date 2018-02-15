@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'signup',
@@ -8,14 +9,14 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class SignupComponent implements OnInit {
 
-    form:FormGroup;
+    form: FormGroup;
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private authService: AuthService) {
 
         this.form = this.fb.group({
-            email: ['',Validators.required],
-            password: ['',Validators.required],
-            confirm: ['',Validators.required]
+            email: ['', Validators.required],
+            password: ['', Validators.required],
+            confirm: ['', Validators.required]
         });
 
 
@@ -25,12 +26,27 @@ export class SignupComponent implements OnInit {
 
     }
 
-
     signUp() {
-        const val = this.form.value;
+      //console.log('signup');
+      // json object with form values
+      const val = this.form.value;
 
-        //TODO
+      // validate form and call service
+      if (val.email && val.password && val.password === val.confirm) {
+        this.authService.signUp(val.email, val.password)
+          .subscribe(
+            () => console.log('user subscribed successfully'), // then case
+            console.error // catch error case
+          );
+      }
+    }
 
+    singIn() {
+      console.log('signin');
+    }
+
+    logOut() {
+      console.log('logout');
     }
 
 }

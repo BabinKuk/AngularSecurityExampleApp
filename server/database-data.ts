@@ -1,4 +1,7 @@
+import { DbUser} from './db-user';
 
+// users map (key=number, value=DbUser)
+export const USERS: {[key: number]: DbUser} = {};
 
 export const LESSONS = {
 
