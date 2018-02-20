@@ -13,9 +13,9 @@ export const ANONYMOUS_USER: User = {
 @Injectable()
 export class AuthService {
 
-    private subject = new BehaviorSubject<User>(ANONYMOUS_USER);
+    private subject = new BehaviorSubject<User>(undefined);
 
-    user$: Observable<User> = this.subject.asObservable();
+    user$: Observable<User> = this.subject.asObservable().filter(user => !!user);
 
     isLoggedIn$: Observable<boolean> = this.user$.map(user => !!user.id);
 
@@ -23,6 +23,8 @@ export class AuthService {
 
     constructor(private http: HttpClient) {
 
+      http.get<User>('/api/user')
+        .subscribe(user => this.subject.next(user ? user : ANONYMOUS_USER));
 
     }
 
@@ -33,5 +35,20 @@ export class AuthService {
             .do(user => this.subject.next(user));
 
     }
+
+    logout() {
+      console.log('logout service');
+      return this.http.post('/api/logout', null)
+        .shareReplay()
+        .do(user => this.subject.next(ANONYMOUS_USER));
+    }
+
+    login(email:string, password:string ) {
+      console.log('login service');
+      return this.http.post<User>('/api/login', {email, password})
+            .shareReplay()
+            .do(user => this.subject.next(user));
+    }
+
 
 }
