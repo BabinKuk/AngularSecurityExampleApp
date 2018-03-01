@@ -5,7 +5,12 @@ import {Application} from "express";
 import * as fs from 'fs';
 import * as https from 'https';
 import {readAllLessons} from "./read-all-lessons.route";
+import { UserInfo } from './user-info.route';
+import { userInfo } from 'os';
 const bodyParser = require('body-parser');
+
+const jwksRsa = require('jwks-rsa');
+const jwt = require('express-jwt');
 
 const app: Application = express();
 
@@ -19,10 +24,34 @@ const optionDefinitions = [
 
 const options = commandLineArgs(optionDefinitions);
 
+// validate jwt
+const checkIfAuthenticated = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true, // default
+    rateLimit: true, // default
+    jwksUri: 'https://babinkuk.eu.auth0.com/.well-known/jwks.json' //JSON Web Key Set (from auth0)
+  }),
+  algorithms: ['RS256']
+});
+
+// middleware
+app.use(checkIfAuthenticated);
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  if (err && err.name == 'UnauthorizedError') {
+    res.status(err.status).json({message: err.message});
+  } else {
+    next(); // jwt validation ok
+  }
+});
+
 // REST API
 app.route('/api/lessons')
     .get(readAllLessons);
 
+app.route('/api/userinfo')
+    .put(userInfo);
 
 if (options.secure) {
 

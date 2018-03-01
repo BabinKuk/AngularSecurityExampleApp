@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LessonsComponent } from './lessons/lessons.component';
@@ -20,6 +20,7 @@ import 'rxjs/add/operator/catch';
 
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/of';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 
 @NgModule({
@@ -35,7 +36,12 @@ import 'rxjs/add/observable/of';
   ],
   providers: [
       LessonsService,
-      AuthService
+      AuthService,
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor,
+        multi: true
+      }
   ],
   bootstrap: [AppComponent]
 })

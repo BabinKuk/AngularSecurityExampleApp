@@ -15,7 +15,8 @@ export class AppComponent  implements OnInit {
     }
 
     ngOnInit() {
-
+      // authenticate jwt from auth0
+      this.auth.retrieveAuthInfoFromUrl();
     }
 
     signUp() {
@@ -24,7 +25,6 @@ export class AppComponent  implements OnInit {
 
     login() {
         this.auth.login();
-
     }
 
     logout() {
