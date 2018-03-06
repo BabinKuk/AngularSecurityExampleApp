@@ -41,7 +41,7 @@ export class SignupComponent implements OnInit {
       }
     }
 
-    singIn() {
+    signIn() {
       console.log('signin');
     }
 
