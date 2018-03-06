@@ -9,7 +9,8 @@
         <li>
             <a routerLink="/lessons">Lessons</a>
         </li>
-        <li>
+        <!-- use custom directive (array of roles) to display admin page -->
+        <li *rbacAllow="['ADMIN']">
             <a routerLink="/admin">Admin</a>
         </li>
         <li *ngIf="isLoggedOut$ | async">

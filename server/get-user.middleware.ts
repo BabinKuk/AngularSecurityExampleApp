@@ -6,7 +6,7 @@ import {Request, Response, NextFunction} from 'express';
 
 
 export function retrieveUserIdFromRequest(req: Request, res: Response, next: NextFunction) {
-
+    // retrieve jwt from session id
     const jwt = req.cookies["SESSIONID"];
 
     if (jwt) {
@@ -26,9 +26,9 @@ export function retrieveUserIdFromRequest(req: Request, res: Response, next: Nex
 
 async function handleSessionCookie(jwt:string, req: Request) {
     try {
-
+        // extract payload
         const payload = await decodeJwt(jwt);
-
+        // store in user
         req["user"] = payload;
 
     }

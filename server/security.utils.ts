@@ -23,7 +23,10 @@ const SESSION_DURATION = 1000;
 
 
 export async function createSessionToken(user: DbUser) {
-    return signJwt({},
+    // app server does not need to have user roles stored in its memory
+    return signJwt({
+          roles: user.roles // add user roles to jwt payload
+        },
         RSA_PRIVATE_KEY, {
         algorithm: 'RS256',
         expiresIn: 7200,

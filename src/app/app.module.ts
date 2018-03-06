@@ -12,7 +12,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 
 import {AuthService} from "./services/auth.service";
 import { AdminComponent } from './admin/admin.component';
-import { RouterModule} from "@angular/router";
+import { RouterModule, Router} from "@angular/router";
 
 
 import 'rxjs/add/operator/switchMap';
@@ -23,6 +23,8 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/observable/of';
+import { RbacAllowDirective } from './common/rbac-allow.directive';
+import { AuthorizationGuard } from './services/authorization.guard';
 
 
 
@@ -33,7 +35,8 @@ import 'rxjs/add/observable/of';
     LessonsComponent,
     LoginComponent,
     SignupComponent,
-    AdminComponent
+    AdminComponent,
+    RbacAllowDirective
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,18 @@ import 'rxjs/add/observable/of';
   ],
   providers: [
       LessonsService,
-      AuthService
+      AuthService,
+      // authorization guard custom provider
+      {
+        provide: 'adminOnlyGuard',
+        useFactory: (authService: AuthService, router: Router) => {
+          return new AuthorizationGuard(['ADMIN'], authService, router);
+        },
+        deps: [
+          AuthService,
+          Router
+        ] // dependencies
+      }
   ],
   bootstrap: [AppComponent]
 })

@@ -17,6 +17,7 @@ export class AdminComponent {
         private authService: AuthService,
         private router: Router) {
 
+        // predefault value
         this.form = this.fb.group({
             userEmail: ['student@gmail.com',Validators.required]
         });
@@ -24,10 +25,11 @@ export class AdminComponent {
 
 
     loginAsUser() {
-
+        console.log('login as user');
         const val = this.form.value;
 
         if (val.userEmail) {
+            // call service
             this.authService.loginAsUser(val.userEmail)
                 .subscribe(
                     user => {

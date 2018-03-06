@@ -42,9 +42,10 @@ export class AuthService {
     }
 
     loginAsUser(email:string) {
+        // pass user email to the server
         return this.http.post<User>('/api/admin', {email})
             .shareReplay()
-            .do(user => this.subject.next(user));
+            .do(user => this.subject.next(user)); // broadcast data
     }
 
     logout() : Observable<any> {

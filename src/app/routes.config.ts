@@ -3,6 +3,7 @@ import {LessonsComponent} from "./lessons/lessons.component";
 import {LoginComponent} from "./login/login.component";
 import {SignupComponent} from "./signup/signup.component";
 import {AdminComponent} from "./admin/admin.component";
+import { AuthorizationGuard } from './services/authorization.guard';
 
 export const routesConfig: Routes = [
     {
@@ -19,7 +20,8 @@ export const routesConfig: Routes = [
     },
     {
         path: 'admin',
-        component: AdminComponent
+        component: AdminComponent,
+        canActivate: ['adminOnlyGuard']
     },
     {
         path: '',
