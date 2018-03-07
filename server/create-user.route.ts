@@ -17,13 +17,17 @@ export function createUser(req: Request, res:Response) {
 
     if (errors.length > 0) {
       console.log(errors);
-      res.status(400).json({errors}); //malformed request
+      // response with malformed request
+      res.status(400).json({errors});
     } else {
       // hash pass and store user
       argon2.hash(credentials.password)
       .then(passwordDigest => {
+        // create user
         const user = db.createUser(credentials.email, passwordDigest);
         console.log(USERS);
+
+        // response
         res.status(200).json({id:user.id, email:user.email});
 
       }).catch(err => {
