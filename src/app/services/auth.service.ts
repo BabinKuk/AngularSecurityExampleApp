@@ -15,6 +15,7 @@ export class AuthService {
 
     private subject = new BehaviorSubject<User>(undefined);
 
+    // broadcast user data only if the user is defined (authenticated users)
     user$: Observable<User> = this.subject.asObservable().filter(user => !!user);
 
     isLoggedIn$: Observable<boolean> = this.user$.map(user => !!user.id);
@@ -22,18 +23,17 @@ export class AuthService {
     isLoggedOut$: Observable<boolean> = this.isLoggedIn$.map(isLoggedIn => !isLoggedIn);
 
     constructor(private http: HttpClient) {
-
+      // load user data and propagate to the rest of application
       http.get<User>('/api/user')
         .subscribe(user => this.subject.next(user ? user : ANONYMOUS_USER));
 
     }
 
     signUp(email:string, password:string ) {
-
-        return this.http.post<User>('/api/signup', {email, password})
-            .shareReplay()
-            .do(user => this.subject.next(user));
-
+      console.log('signup service');
+      return this.http.post<User>('/api/signup', {email, password})
+          .shareReplay()
+          .do(user => this.subject.next(user));
     }
 
     logout() {
@@ -49,6 +49,5 @@ export class AuthService {
             .shareReplay()
             .do(user => this.subject.next(user));
     }
-
 
 }

@@ -1,6 +1,9 @@
 import { Session } from "./session";
 import { User } from "../src/app/model/user";
 
+/*
+to store session in server's memory
+*/
 class SessionStore {
   private sessions: {[key: string]: Session} = {};
 
@@ -23,7 +26,6 @@ class SessionStore {
     console.log('delete session id');
     delete this.sessions[sessionId];
   }
-
 
 }
 

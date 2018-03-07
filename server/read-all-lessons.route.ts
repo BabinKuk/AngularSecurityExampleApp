@@ -4,11 +4,12 @@ import { sessionStore } from "./session-store";
 
 
 export function readAllLessons(req, res) {
-
+    // retrieve session from cookies
     const sessionId = req.cookies['SESSIONID'];
-
+    // validate session
     const isSessionValid = sessionStore.isSessionValid(sessionId);
 
+    // response
     if (!isSessionValid) {
       console.log('session invalid');
       res.status(403);

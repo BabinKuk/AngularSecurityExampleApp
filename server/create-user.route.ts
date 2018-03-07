@@ -31,13 +31,12 @@ async function createUserAndSession(res: Response, credentials) {
   //console.log(USERS);
 
   const sessionId = await randomBytes(32).then(bytes => bytes.toString('hex'));
-
   console.log('sessionId', sessionId);
-
+  // store session in server's memory
   sessionStore.createSession(sessionId, user);
-
+  // set cookies (with security parameters)
   res.cookie('SESSIONID', sessionId, {httpOnly: true, secure: true});
-
+  // send response
   res.status(200).json({id:user.id, email:user.email});
 
 }

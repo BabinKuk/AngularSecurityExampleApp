@@ -23,6 +23,7 @@ export class SignupComponent implements OnInit {
 
 
     constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+        // form predefined values
         this.form = this.fb.group({
             email: ['test@gmail.com',Validators.required],
             password: ['Password10',Validators.required],
@@ -40,7 +41,7 @@ export class SignupComponent implements OnInit {
         const val = this.form.value;
 
         if (val.email && val.password && val.password === val.confirm) {
-
+            // call service
             this.authService.signUp(val.email, val.password)
                 .subscribe(
                     () => {

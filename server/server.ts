@@ -16,7 +16,7 @@ const cookieParser = require('cookie-parser');
 const app: Application = express();
 
 app.use(bodyParser.json());
-app.use(cookieParser());
+app.use(cookieParser()); // read/write cookies
 
 const commandLineArgs = require('command-line-args');
 
