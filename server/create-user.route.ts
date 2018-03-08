@@ -33,15 +33,15 @@ async function createUserAndSession(res:Response, credentials) {
     const passwordDigest = await argon2.hash(credentials.password);
 
     const user = db.createUser(credentials.email, passwordDigest);
-
+    // create session token for user
     const sessionToken = await createSessionToken(user.id.toString());
-
+    // create csrf token for server csrf cookie defense
     const csrfToken = await createCsrfToken(sessionToken);
-
+    // set cookie
     res.cookie("SESSIONID", sessionToken, {httpOnly:true, secure:true});
-
+    // set cookie accessible from app javascript
     res.cookie('XSRF-TOKEN', csrfToken);
-
+    // response
     res.status(200).json({id:user.id, email:user.email});
 }
 

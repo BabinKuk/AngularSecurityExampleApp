@@ -18,8 +18,8 @@ const cookieParser = require('cookie-parser');
 
 const app: Application = express();
 
-app.use(cookieParser());
-app.use(retrieveUserIdFromRequest);
+app.use(cookieParser()); // read/write cookies
+app.use(retrieveUserIdFromRequest); // read user from request
 app.use(bodyParser.json());
 
 

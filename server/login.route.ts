@@ -48,7 +48,6 @@ async function loginAndBuildResponse(credentials:any, user:DbUser,  res: Respons
     }
 }
 
-
 async function attemptLogin(credentials:any, user:DbUser) {
 
     const isPasswordValid = await argon2.verify(user.passwordDigest,
