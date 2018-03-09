@@ -32,7 +32,7 @@ export class AuthService {
     });
 
     private userSubject = new BehaviorSubject<User>(undefined);
-
+    // broadcast any user object except undefined
     user$: Observable<User> = this.userSubject.asObservable().filter(user => !!undefined);
 
     constructor(private http: HttpClient, private router: Router) {
@@ -64,6 +64,7 @@ export class AuthService {
           // clear hash
           window.location.hash = '';
           console.log('Auth successfull, result: ', authResult);
+          // set session params
           this.setSession(authResult);
 
           // send req to save user email
@@ -73,6 +74,7 @@ export class AuthService {
     }
 
     userInfo() {
+      // save user data in server memory
       // body is null because user email is already inside jwt
       this.http.put<User>('/api/userInfo', null)
         .shareReplay() // disable multiple put requests
@@ -88,26 +90,27 @@ export class AuthService {
     }
 
     public isLoggedIn() {
-        // check expiration time to see if user is logged in
+        // check token expiration time to see if user is logged in
         // compare current moment with expiration time
         return moment().isBefore(this.getExpiration());
     }
 
     isLoggedOut() {
-        return !this.isLoggedIn();
+      // opposite to isLoggedIn
+      return !this.isLoggedIn();
     }
 
     getExpiration() {
-      // get expiration from local storage
+      // get expiration time from local storage
       const expiration = localStorage.getItem('expires_at');
       const expiresAt = JSON.parse(expiration);
       return moment(expiresAt);
     }
 
     private setSession(authResult): any {
-      //set expiration moment
+      // set expiration moment (add expiresIn seconds to current moment)
       const expiresAt = moment().add(authResult.expiresIn, 'second');
-      // save in local storage
+      // save jwt and expiration time params in local storage
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
     }

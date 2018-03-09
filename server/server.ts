@@ -5,8 +5,7 @@ import {Application} from "express";
 import * as fs from 'fs';
 import * as https from 'https';
 import {readAllLessons} from "./read-all-lessons.route";
-import { UserInfo } from './user-info.route';
-import { userInfo } from 'os';
+import { userInfo } from './user-info.route';
 const bodyParser = require('body-parser');
 
 const jwksRsa = require('jwks-rsa');
@@ -24,7 +23,8 @@ const optionDefinitions = [
 
 const options = commandLineArgs(optionDefinitions);
 
-// validate jwt
+// config middleware
+// validate jwt (fetch public key from auth0 site)
 const checkIfAuthenticated = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true, // default

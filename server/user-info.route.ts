@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { db } from "./database";
 
-export function UserInfo(req:Request, res: Response) {
+export function userInfo(req:Request, res: Response) {
+  // fetch from request
   const userInfo = req.user;
   console.log('Check if user exists', userInfo);
 
