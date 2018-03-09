@@ -24,7 +24,7 @@ export async function createSessionToken(userId: string) {
   // create jwt with empty payload
   return jwt.sign({}, RSA_PRIVATE_KEY, {
     algorithm: 'RS256',
-    expiresIn: 240,
+    expiresIn: SESSION_DURATION,
     subject: userId
   });
 }

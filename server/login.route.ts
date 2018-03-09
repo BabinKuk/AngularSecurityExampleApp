@@ -26,17 +26,16 @@ export function login(req: Request, res: Response) {
 async function loginAndBuildResponse(credentials:any, user:DbUser,  res: Response) {
 
     try {
-
+        // create session token for user
         const sessionToken = await attemptLogin(credentials, user);
-
+        // create csrf token for server (csrf double cookie submit defense)
         const csrfToken = await createCsrfToken(sessionToken);
-
         console.log("Login successful");
-
+        // set cookie
         res.cookie("SESSIONID", sessionToken, {httpOnly:true, secure:true});
-
+        // set cookie accessible from app javascript
         res.cookie('XSRF-TOKEN', csrfToken);
-
+        // response
         res.status(200).json({id:user.id, email:user.email});
 
     }
